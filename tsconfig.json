@@ -10,9 +10,10 @@
         "baseUrl": "src",
         "esModuleInterop": true,
         "strictNullChecks": true,
+        "skipLibCheck": true,
         "paths": {
             "@Vite/*": ["*"]
         }
     },
-    "include": ["src/**/*", "src/server.ts"],
+    "include": ["src/**/*", "src/server.ts", "./declarations.d.ts"],
   }
