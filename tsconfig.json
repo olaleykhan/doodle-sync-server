@@ -15,5 +15,5 @@
             "@Vite/*": ["*"]
         }
     },
-    "include": ["src/**/*", "src/server.ts", "./declarations.d.ts"],
+    "include": ["src/**/*", "src/server.ts", "src/declarations.d.ts"],
   }
