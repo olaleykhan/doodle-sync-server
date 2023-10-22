@@ -1,42 +1,19 @@
-import 'dotenv/config';
+import { WebSocketServer } from 'ws';
 import http from 'http';
-import expressWs from 'express-ws';
-
 import app from './app.js';
-import { type WebSocket } from 'ws';
-import { type Request } from 'express';
-// @ts-expect-error
-import * as yWebsocket from '../node_modules/y-websocket/bin/utils.js';
+// @ts-expect-error;
+import { setupWSConnection } from '../node_modules/y-websocket/bin/utils.js';
 
-const PORT = process.env.PORT ?? 8000;
-// connect y-websocekt server to express app
+const port = 1234;
 
 const server = http.createServer(app);
-const wsInstance = expressWs(app, server);
+const wss = new WebSocketServer({ server });
 
-wsInstance.app.ws('/yjs', (ws: WebSocket, req: Request) => {
-  yWebsocket.setupWSConnection(ws, req);
-  console.log('y-websocket connected', ws.url);
+wss.on('connection', (conn, req) => {
+  setupWSConnection(conn, req, { gc: req.url?.slice(1) !== 'prosemirror-versions' });
+  console.log('Web socket connected on port : ', port);
 });
 
-// console.log(wsInstance, 'wsInstance');
-
-async function startServer (): Promise<void> {
-  server.listen(PORT, () => { console.log(`running on port : ${PORT}`); });
-}
-
-await startServer();
-
-// handle unhandled rejections
-
-process.on('bad auth', (err: unknown) => {
-  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
-
-  if (err instanceof Error) {
-    console.log(err.name, err.message);
-  }
-
-  server.close(() => {
-    process.exit(1);
-  });
+server.listen(port, () => {
+  console.log(`server listening on port ${port}`);
 });
