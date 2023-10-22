@@ -1,7 +1,7 @@
 import express, { type Express, type Response, type Request, type NextFunction } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-// import AppError from './utils/appError.js';
+import AppError from './utils/appError.js';
 import errorController from './error/error.controller.js';
 
 import router from './routes/router.js';
@@ -18,9 +18,9 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/v1/', router);
-// app.all('*', (req, res, next) => {
-//   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
-// });
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
 
 app.use((err: Error & { statusCode: number }, req: Request, res: Response, next: NextFunction): void => {
   err.statusCode = err.statusCode ?? 500;
