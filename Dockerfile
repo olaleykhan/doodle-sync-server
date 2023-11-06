@@ -1,11 +1,10 @@
-#Specify Parent Image
-FROM node:17-alpine
+# syntax=docker/dockerfile:1
 
-# working directory
-WORKDIR /app
-# copy application source code into working directory
+FROM node:18-alpine
+WORKDIR /usr/src/app
 COPY . .
-# Expose port (optional when working with cli. why?)
+RUN yarn install --production
 
-# commands to run after docker container has been instantiated
-CMD ["node", "-esm", "src/server.ts"]
+CMD ["yarn", "serve"]
+EXPOSE 3000
+

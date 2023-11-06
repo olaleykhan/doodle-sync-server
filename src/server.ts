@@ -5,9 +5,9 @@ import { setupWSConnection } from '../node_modules/y-websocket/bin/utils.js';
 
 const app = express();
 const wsInstance = expressWs(app);
-const port = 1234;
+const port = process.env.PORT || 8000;
 
-wsInstance.app.ws('/yjs/:id', (ws, req) => {
+wsInstance.app.ws('/yjs', (ws, req) => {
   setupWSConnection(ws, req); // Assuming this function can handle the ws object directly
   console.log('WebSocket connected on /yjs route to port: ', port);
   ws.on('error', function (err) {
